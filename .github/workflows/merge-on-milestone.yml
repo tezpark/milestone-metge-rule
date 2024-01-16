@@ -16,7 +16,7 @@ jobs:
     - name: Read Milestone Title from File
       id: milestone
       run: |
-        MILESTONE_TITLE=$(cat path/to/your/file) # 여기에 파일 경로를 입력하세요.
+        MILESTONE_TITLE=$(cat CURRENT_MILESTONE) # 여기에 파일 경로를 입력하세요.
         echo "Milestone title from file is $MILESTONE_TITLE"
         echo "::set-output name=title::$MILESTONE_TITLE"
 
