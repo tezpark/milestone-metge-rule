@@ -2,7 +2,9 @@ name: Merge on Milestone from File
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main # 워크플로우가 트리거될 브랜치를 지정합니다.
 
 jobs:
   check-milestone:
