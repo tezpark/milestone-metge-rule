@@ -1,5 +1,36 @@
-name: Merge on Milestone
+name: Merge on Milestone from File
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
+jobs:
+  check-milestone:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        ref: 'main' # main 브랜치를 체크아웃합니다.
+
+    - name: Read Milestone Title from File
+      id: milestone
+      run: |
+        MILESTONE_TITLE=$(cat path/to/your/file) # 여기에 파일 경로를 입력하세요.
+        echo "Milestone title from file is $MILESTONE_TITLE"
+        echo "::set-output name=title::$MILESTONE_TITLE"
+
+    - name: Check Milestone
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        FILE_MILESTONE_TITLE=${{ steps.milestone.outputs.title }}
+        MILESTONE_TITLE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER" | \
+          jq -r '.milestone.title')
+
+        if [ "$MILESTONE_TITLE" == "$FILE_MILESTONE_TITLE" ]; then
+          echo "Milestone matched."
+        else
+          echo "Milestone not matched."
+          exit 1
+        fi
