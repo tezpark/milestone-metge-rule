@@ -7,7 +7,7 @@ on:
       - main # 워크플로우가 트리거될 브랜치를 지정합니다.
 
 jobs:
-  check-milestone:
+  check-milestone-exist:
     runs-on: ubuntu-latest
     steps:
     - name: Check Milestone value exist
