@@ -10,7 +10,7 @@ jobs:
   check-milestone:
     runs-on: ubuntu-latest
     steps:
-    - name: Check Milestone
+    - name: Check Milestone value exist
       run: |
         PR_NUMBER=${{ github.event.pull_request.number }}
         MILESTONE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
