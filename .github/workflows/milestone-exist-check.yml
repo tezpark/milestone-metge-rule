@@ -1,0 +1,25 @@
+name: Milestone exist check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main # 워크플로우가 트리거될 브랜치를 지정합니다.
+
+jobs:
+  check-milestone:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Milestone
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        MILESTONE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER" | \
+          jq -r '.milestone')
+
+        if [ "$MILESTONE" == "null" ]; then
+          echo "No milestone set for this PR."
+          exit 1
+        else
+          echo "Milestone is set."
+        fi
